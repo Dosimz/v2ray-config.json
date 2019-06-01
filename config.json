@@ -1,0 +1,113 @@
+{
+  "log": {
+    "access": "",
+    "error": "",
+    "loglevel": "warning"
+  },
+  "inbound": {
+    "port": 1080, // SOCKS 代理端口，在浏览器中需配置代理并指向这个端口
+    "listen": "127.0.0.1",
+    "protocol": "socks",
+    "domainOverride": [
+      "tls",
+      "http"
+    ],
+    "settings": {
+      "auth": "noauth",
+      "udp": true,
+      "ip": "127.0.0.1",
+      "clients": null
+    },
+    "streamSettings": null
+  },
+  "outbound": {
+    "tag": "agentout",
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "server", // 服务器地址，请修改为你自己的服务器 ip 或域名
+          "port": 10086,  // 服务器端口
+          "users": [
+            {
+              "id": "b831381d-6324-4d53-ad4f-8cda48b30811", //客户端和服务器统一的ID号
+              "alterId": 0,
+              "email": "t@t.tt",
+              "security": "aes-128-gcm"
+            }
+          ]
+        }
+      ],
+      "servers": null
+    },
+    "streamSettings": {
+      "network": "tcp",
+      "security": "",
+      "tlsSettings": null,
+      "tcpSettings": null,
+      "kcpSettings": null,
+      "wsSettings": null,
+      "httpSettings": null
+    },
+    "mux": {
+      "enabled": true
+    }
+  },
+  "inboundDetour": null,
+  "outboundDetour": [
+    {
+      "protocol": "freedom",
+      "settings": {
+        "response": null
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "blockout"
+    }
+  ],
+  "dns": {
+    "servers": [
+      "8.8.8.8",
+      "8.8.4.4",
+      "localhost"
+    ]
+  },
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "type": "field",
+          "port": null,
+          "outboundTag": "direct",
+          "ip": [
+            "0.0.0.0/8",
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.0.0.0/24",
+            "192.0.2.0/24",
+            "192.168.0.0/16",
+            "198.18.0.0/15",
+            "198.51.100.0/24",
+            "203.0.113.0/24",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "domain": null
+        }
+      ]
+    }
+  }
+}
